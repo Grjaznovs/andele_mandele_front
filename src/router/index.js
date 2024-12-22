@@ -9,6 +9,11 @@ const router = createRouter({
       name: 'RickAndMorty',
       component: RickAndMortyView,
     },
+    // {
+    //   path: '/show',
+    //   name: 'RickAndMorty',
+    //   component: RickAndMortyView,
+    // },
   ],
 })
 

@@ -7,17 +7,23 @@ export default {
     return {
       list: [],
       loading: true,
-      info: null
+      page: 1,
+      path: `${this.BASE_API_URL}rickandmorty/list`
     }
   },
 
+  created () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+
+  unmounted () {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+
   methods: {
-    init: async function () {
-      // const url = process.env.VUE_APP_API_URL;
-      // console.log(import.meta.env.VITE_APP_BASE_URL);
-      const { data } = await this.getCharacters('http://127.0.0.1:8000/api/rickandmorty/list');
-      this.list = data;
-      console.log(data);
+    async populateData() {
+      const { data } = await this.getCharacters(this.path);
+      this.list = data.data;
     },
 
     async getCharacters(url) {
@@ -28,9 +34,24 @@ export default {
         .finally(() => this.loading = false);
     },
 
+    async handleScroll() {
+      if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        this.page++;
+        const { data } = await this.getCharacters(this.path + '/' + this.page);
+        if (data.data.length) {
+          this.list = this.list.concat(data.data);
+        } else {
+          this.page--;
+        }
+      }
+    },
+
+    showCharacter(id) {
+      this.$router.push(`/show/${id}`);
+    }
   },
 
   beforeMount() {
-    this.init().then(() => null);
+    this.populateData().then(() => null);
   }
 }
