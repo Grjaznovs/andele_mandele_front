@@ -1,20 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import RickAndMortyView from '@/views/RickAndMortyView.vue'
+import RickAndMortyShow from "@/components/rickandmorty/show/RickAndMortyShow.vue";
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'RickAndMorty',
-      component: RickAndMortyView,
-    },
-    // {
-    //   path: '/show',
-    //   name: 'RickAndMorty',
-    //   component: RickAndMortyView,
-    // },
-  ],
+const routes = [
+  {
+    path: '/',
+    name: 'RickAndMortyView',
+    component: RickAndMortyView
+  },
+  {
+    path: '/show/:characterId',
+    name: 'RickAndMortyShow',
+    component: RickAndMortyShow
+  }
+];
+
+export default createRouter({
+  history: createWebHistory(),
+  routes
 })
-
-export default router

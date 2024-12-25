@@ -7,8 +7,8 @@ export default {
     return {
       list: [],
       loading: true,
-      page: 1,
-      path: `${this.BASE_API_URL}rickandmorty/list`
+      path: `${this.BASE_API_URL}rickandmorty/list`,
+      page: 1
     }
   },
 
@@ -46,8 +46,9 @@ export default {
       }
     },
 
-    showCharacter(id) {
-      this.$router.push(`/show/${id}`);
+    viewEvent (id) {
+      const routeData = this.$router.resolve({ name: 'RickAndMortyShow', params: { characterId: id } });
+      window.open(routeData.href, '_blank');
     }
   },
 

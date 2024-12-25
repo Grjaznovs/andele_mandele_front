@@ -6,12 +6,8 @@
           {{ contact.name }}
         </div>
         <div class="card-body">
-          <a @click="showCharacter(contact.id)" class="page-link" href>
-            <img
-              class="card-img-top"
-              alt="..."
-              :src="contact.image"
-            >
+          <a @click="viewEvent(contact.id)" class="page-link" href>
+            <img class="card-img-top" :src="contact.image">
           </a>
         </div>
       </div>
