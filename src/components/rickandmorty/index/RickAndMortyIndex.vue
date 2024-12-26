@@ -1,6 +1,7 @@
 <template>
   <div class="row">
-    <div class="col-auto p-2" v-for="(contact) in list" :key="contact.id">
+    <spinner v-if="loading" variant="success" />
+    <div v-else class="col-auto p-2" v-for="(contact) in list" :key="contact.id">
       <div class="card" style="width: 23rem;">
         <div class="card-header">
           {{ contact.name }}

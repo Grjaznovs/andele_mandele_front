@@ -1,6 +1,7 @@
 <template>
   <div class="container mt-5">
-    <div class="card mb-3 col-12 bg-light bg-opacity-75">
+    <spinner v-if="loading" variant="success" />
+    <div v-else class="card mb-3 col-12 bg-light bg-opacity-75">
       <div class="row g-0">
         <div class="col-4">
           <img class="img-fluid rounded-start" :src="editEl.image">

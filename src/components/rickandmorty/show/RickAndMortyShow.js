@@ -5,12 +5,13 @@ const defaultEl = {
   name: null,
   status: null,
   species: null,
-  type: null,
   gender: null,
   image: null,
   location: {
-    name: null
-  }
+    name: null,
+    url: null
+  },
+  url: null
 }
 
 export default {
@@ -20,31 +21,33 @@ export default {
     return {
       editEl: defaultEl,
       loading: true,
-      path: `${this.BASE_API_URL}rickandmorty/show`,
+      path: 'rickandmorty/show',
     }
   },
 
   methods: {
     async populateData() {
-      const { data } = await this.getCharacter(this.path + '/' + this.$route.params.characterId);
-      if (data.data) {
-        this.editEl = this.cloneObject(data.data);
+      const path = this.path + '/' + this.$route.params.characterId;
+      const { data } = await this.getCharacter(this.BasicHelper.getRequestUrl(path));
+      if (data) {
+        this.editEl = this.BasicHelper.cloneObject(data);
       } else {
-        this.editEl = this.cloneObject(defaultEl);
+        this.editEl = this.BasicHelper.cloneObject(defaultEl);
       }
     },
 
     async getCharacter(url) {
-      return await axios.get(url)
-        .catch(error => {
-          this.errored = true
-        })
-        .finally(() => this.loading = false);
+      return new Promise((resolve, reject) => {
+        axios.get(url)
+          .then(response => {
+            resolve(response.data);
+          })
+          .catch(error => {
+            reject(error.status);
+          })
+          .finally(() => this.loading = false);
+      });
     },
-
-    cloneObject (object) {
-      return JSON.parse(JSON.stringify(object));
-    }
   },
 
   beforeMount() {

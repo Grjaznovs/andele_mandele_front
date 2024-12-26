@@ -7,7 +7,7 @@ export default {
     return {
       list: [],
       loading: true,
-      path: `${this.BASE_API_URL}rickandmorty/list`,
+      path: 'rickandmorty/list',
       page: 1
     }
   },
@@ -22,24 +22,30 @@ export default {
 
   methods: {
     async populateData() {
-      const { data } = await this.getCharacters(this.path);
-      this.list = data.data;
+      const { data } = await this.getCharacters(this.BasicHelper.getRequestUrl(this.path));
+      this.list = data;
     },
 
     async getCharacters(url) {
-      return await axios.get(url)
-        .catch(error => {
-          this.errored = true
-        })
-        .finally(() => this.loading = false);
+      return new Promise((resolve, reject) => {
+        axios.get(url)
+          .then(response => {
+            resolve(response.data);
+          })
+          .catch(error => {
+            reject(error.status);
+          })
+          .finally(() => this.loading = false);
+      });
     },
 
     async handleScroll() {
       if (Math.ceil(window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
         this.page++;
-        const { data } = await this.getCharacters(this.path + '/' + this.page);
-        if (data.data.length) {
-          this.list = this.list.concat(data.data);
+        const path = this.path + '/' + this.page;
+        const { data } = await this.getCharacters(this.BasicHelper.getRequestUrl(path));
+        if (data.length) {
+          this.list = this.list.concat(data);
         } else {
           this.page--;
         }
